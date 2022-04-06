@@ -1,5 +1,7 @@
 # This is my attempt at making a heap data structure
 import time
+
+
 class Heap:
     class Node:
         def __init__(self, problem, priority):
@@ -54,15 +56,61 @@ class Heap:
         pairs[index] = tempnode
         self.pairs = pairs
 
+    def bubble_up(self,node=None,index=None):
+        # copy the values of the node to be pasted later at the correct index
+        values = dict(node.__dict__)
+        # If the index isnt selected, we just need the node object
+        if not index:
+            i = int(node.index)
+        else:
+            i = int(index)
+        # pairs definition so i dont have to type self. all the time
+        pairs = self.pairs
+
+        while i > 0:
+
+            parent_node_index = int((i - 1) / self.d)
+            if values["priority"] >= pairs[parent_node_index].priority:
+                pairs[i].__dict__["priority"] = pairs[parent_node_index].__dict__["priority"]
+                pairs[i].__dict__["problem"] = pairs[parent_node_index].__dict__["problem"]
+                i = parent_node_index
+            else:
+                pairs[i].__dict__["priority"] = values["priority"]
+                pairs[i].__dict__["problem"] = values["problem"]
+                break
+            if i == 0:
+                pairs[i].__dict__["priority"] = values["priority"]
+                pairs[i].__dict__["problem"] = values["problem"]
+
+        # save changes
+        self.pairs = pairs
+
     def heapify(self):
         last_internal_node = int((len(self.pairs) - 2) / self.d)
         for i in reversed(range(last_internal_node + 1)):
             self.push_down(self.pairs, i, self.pairs[i])
 
-
+    def add(self, *args):
+        for i in args:
+            index = len(self.pairs)
+            self.pairs.append(Heap.Node(i[0], i[1]))
+            self.pairs[index].index = index
+            self.object_mapper[i[0]] = self.pairs[index]
+            # Set parent index, set current index as child node of parent
+            self.pairs[index].parent = int((index - 1) / self.d)
+            self.pairs[int((index - 1) / index)].child.append(index)
+            self.bubble_up(self.pairs[index])
 
 if __name__ == '__main__':
     a = Heap(2, ("forment unrest", 1), ("Kill neighbors", -7), ("Test school speed limit", 9),
              ("Kill trees for paper", 1), ("sell a best seller", 10), ("apples", 11), ("oranges", 48),
              ("trees", -2), ("homies", 62))
+
     a.heapify()
+    a.add(("homies", 629),("homies", 629),("homies", -629))
+
+    '''
+    Pretty cool check for all items in the priority queue put in order of index
+    I thought I would have to do something about the duplicate problems.
+    print("| -> |".join([f"{x.priority} : {x.index}" for x in a.pairs]))
+    print([(j.index,j.priority, j.problem) for j in a.object_mapper.values()])'''
