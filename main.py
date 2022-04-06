@@ -29,7 +29,7 @@ class Heap:
         d = self.d
         # Create a temporary node
         tempnode = Heap.Node(node.problem, node.priority)
-        # Copy all attributes ove to tempnode
+        # Copy all attributes over to tempnode
         tempnode.__dict__.update(node.__dict__)
         first_leaf_index = int((len(pairs) - 2) / d) + 1
 
@@ -58,8 +58,7 @@ class Heap:
         last_internal_node = int((len(self.pairs) - 2) / self.d)
         for i in reversed(range(last_internal_node + 1)):
             self.push_down(self.pairs, i, self.pairs[i])
-            print([x.index for x in self.pairs], [x.priority for x in self.pairs],
-                  [f"{x.priority}:{[self.pairs[j].priority for j in x.child]}" for x in self.pairs])
+
 
 
 if __name__ == '__main__':
