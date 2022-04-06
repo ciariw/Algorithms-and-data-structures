@@ -34,9 +34,6 @@ class Heap:
         first_leaf_index = int((len(pairs) - 2) / d) + 1
 
         while 0 <= index < first_leaf_index:
-            # biggest child is breaking the code
-            # get the index of the biggest child. Node's children
-
             bc_priority = max([(pairs[x].priority, x) for x in pairs[index].child])
 
             # Select biggest child
