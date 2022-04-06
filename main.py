@@ -17,7 +17,7 @@ class Heap:
         self.object_mapper = {}
         for index, i in enumerate(args):
             # go through the args and assign relationships based on the index of pairs
-            pairs.append(Heap.Node(i[0], i[1]))
+            pairs.append(self.Node(i[0], i[1]))
             pairs[index].index = index
             self.object_mapper[i[0]] = pairs[index]
             if len(pairs) > 1:
@@ -30,7 +30,7 @@ class Heap:
     def push_down(self, pairs=None, index=None, node=None):
         d = self.d
         # Create a temporary node
-        tempnode = Heap.Node(node.problem, node.priority)
+        tempnode = self.Node(node.problem, node.priority)
         # Copy all attributes over to tempnode
         tempnode.__dict__.update(node.__dict__)
         first_leaf_index = int((len(pairs) - 2) / d) + 1
@@ -93,7 +93,7 @@ class Heap:
     def add(self, *args):
         for i in args:
             index = len(self.pairs)
-            self.pairs.append(Heap.Node(i[0], i[1]))
+            self.pairs.append(self.Node(i[0], i[1]))
             self.pairs[index].index = index
             self.object_mapper[i[0]] = self.pairs[index]
             # Set parent index, set current index as child node of parent
@@ -105,12 +105,12 @@ if __name__ == '__main__':
     a = Heap(2, ("forment unrest", 1), ("Kill neighbors", -7), ("Test school speed limit", 9),
              ("Kill trees for paper", 1), ("sell a best seller", 10), ("apples", 11), ("oranges", 48),
              ("trees", -2), ("homies", 62))
-
     a.heapify()
-    a.add(("homies", 629),("homies", 629),("homies", -629))
+    a.add(("homies", 629),("homies", 29),("homies", -629))
 
     '''
     Pretty cool check for all items in the priority queue put in order of index
     I thought I would have to do something about the duplicate problems.
     print("| -> |".join([f"{x.priority} : {x.index}" for x in a.pairs]))
     print([(j.index,j.priority, j.problem) for j in a.object_mapper.values()])'''
+    print("| -> |".join([f"{x.priority} : {x.index}" for x in a.pairs]))
