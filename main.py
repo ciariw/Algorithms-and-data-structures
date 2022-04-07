@@ -26,6 +26,8 @@ class Heap:
                 pairs[int((index - 1) / tree_width)].child.append(index)
         self.pairs = pairs
         self.d = tree_width
+        print([(j.index, j.priority, j.problem, j.child) for j in self.object_mapper.values()])
+
 
     def push_down(self, pairs=None, index=None, node=None):
         d = self.d
@@ -34,6 +36,7 @@ class Heap:
         # Copy all attributes over to tempnode
         tempnode.__dict__.update(node.__dict__)
         first_leaf_index = int((len(pairs) - 2) / d) + 1
+        nodeinfo = dict(node.__dict__)
 
         while 0 <= index < first_leaf_index:
             bc_priority = max([(pairs[x].priority, x) for x in pairs[index].child])
@@ -42,18 +45,17 @@ class Heap:
             # compare with biggest child
             # if smaller than biggest child, swap positions and child locations
 
-            if bc_priority[0] > tempnode.priority:
+            if bc_priority[0] > nodeinfo["priority"]:
                 pairs[index].__dict__["problem"] = pairs[bc_priority[1]].problem
                 pairs[index].__dict__["priority"] = bc_priority[0]
                 index = int(bc_priority[1])
-                tempnode.child = list(pairs[index].child)
-                tempnode.index = index
-                pairs[index].child = tempnode.child
 
             else:
                 break
 
-        pairs[index] = tempnode
+        pairs[index].__dict__["problem"] = nodeinfo["problem"]
+        pairs[index].__dict__["priority"] = nodeinfo["priority"]
+
         self.pairs = pairs
 
     def bubble_up(self,node=None,index=None):
@@ -98,19 +100,50 @@ class Heap:
             self.object_mapper[i[0]] = self.pairs[index]
             # Set parent index, set current index as child node of parent
             self.pairs[index].parent = int((index - 1) / self.d)
-            self.pairs[int((index - 1) / index)].child.append(index)
+            self.pairs[int((index - 1) / self.d)].child.append(index)
             self.bubble_up(self.pairs[index])
 
+
+
 if __name__ == '__main__':
-    a = Heap(2, ("forment unrest", 1), ("Kill neighbors", -7), ("Test school speed limit", 9),
+    d = 3
+    a = Heap(d, ("forment unrest", 1), ("Kill neighbors", -7), ("Test school speed limit", 9),
              ("Kill trees for paper", 1), ("sell a best seller", 10), ("apples", 11), ("oranges", 48),
-             ("trees", -2), ("homies", 62))
+             ("trees", -2), ("jojo", 62))
     a.heapify()
-    a.add(("homies", 629),("homies", 29),("homies", -629))
+    a.add(("yies", 629),("bombadiers", 29),("fundoo", -629))
 
     '''
     Pretty cool check for all items in the priority queue put in order of index
     I thought I would have to do something about the duplicate problems.
     print("| -> |".join([f"{x.priority} : {x.index}" for x in a.pairs]))
-    print([(j.index,j.priority, j.problem) for j in a.object_mapper.values()])'''
-    print("| -> |".join([f"{x.priority} : {x.index}" for x in a.pairs]))
+    print([(j.index,j.priority, j.problem) for j in a.object_mapper.values()])
+     Just for easy visualization V 
+    li = []
+
+
+    i = 0
+    td = int(d)
+    subli = []
+    n = 0
+    sublicc = 0
+    while i < len(a.object_mapper.values()):
+        if i < td ** n:
+            subli.append(f"{a.pairs[i].priority}")
+            i += 1
+            sublicc += 1
+            if sublicc%3 == 0:
+                subli.append("| |")
+        else:
+            td += 1
+            n += 1
+            li.append(subli)
+            subli = []
+            sublicc = 0
+        if i == len(a.object_mapper.values()):
+            li.append(subli)
+            break
+
+    print("\n\n\n".join(["  ".join(z) for z in li]))
+'''
+
