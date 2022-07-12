@@ -107,7 +107,7 @@ class Heap:
 
 if __name__ == '__main__':
     d = 3
-    a = Heap(d, ("forment unrest", 1), ("1029384756", -7), ("56473829120", 9),
+    a = Heap(d, ("foment unrest", 1), ("1029384756", -7), ("56473829120", 9),
              ("Mill trees for paper", 1), ("sell a best seller", 10), ("apples", 11), ("oranges", 48),
              ("trees", -2), ("Trucks", 62))
     a.heapify()
